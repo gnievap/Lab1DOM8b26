@@ -65,3 +65,16 @@ btnAgregarCard.addEventListener('click', () => {
     listaArticulos2.append(new_article);
     setEstado('Nueva card agregada');
 });
+
+// Eliminar elementos agregados al DOM
+const btnEliminarCard = $('#btnLimpiar');
+btnEliminarCard.addEventListener('click', () => {
+    const cards = $$('#listaArticulos .card');
+    let removed = 0;
+    cards.forEach(card => { 
+        if ( card.dataset.seed == 'true' ) return;
+        card.remove();
+        removed++;
+    });
+    setEstado('Artículos eliminados: ' + removed);
+});
