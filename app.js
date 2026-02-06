@@ -4,6 +4,25 @@
 const $ = (sel, root = document) => root.querySelector(sel);
 const $$ = (sel, root = document) => Array.from(root.querySelectorAll(sel));
 
+const buildcard = ({title, text, tags}) => {
+    const article = document.createElement('article');
+    article.className = 'card';
+    article.dataset.tags = tags;
+    article.innerHTML = `
+        <h3 class="card-title"></h3>
+        <p class="card-text"></p>
+        <div class="card-actions">
+              <button class="btn small" type="button" data-action="like">👍 Like</button>
+              <button class="btn small ghost" type="button" data-action="remove">Eliminar</button>
+              <span class="badge" aria-label="likes">0</span>
+        </div>
+    `;
+    article.querySelector('.card-title').textContent = title;
+    article.querySelector('.card-text').textContent = text;
+    return article;
+};
+
+
 const estadoUI = $('#estadoUI');
 const setEstado = (msg) => { estadoUI.textContent = msg; };
 setEstado('Listo');
@@ -47,22 +66,13 @@ listaArticulos.addEventListener('mouseover', (event) => {
  const listaArticulos2 = $('#listaArticulos');
 
 btnAgregarCard.addEventListener('click', () => {
-    const new_article = document.createElement('article');
-    new_article.className = 'card';
-    new_article.dataset.tags = 'agentes';
-    new_article.innerHTML = `
-        <h3 class="card-title">Nueva card: Agentes de IA</h3>
-        <p class="card-text">
-            Los agentes de IA pueden interactuar con su entorno
-             para lograr objetivos específicos.
-        </p>
-        <div class="card-actions">
-              <button class="btn small" type="button" data-action="like">👍 Like</button>
-              <button class="btn small ghost" type="button" data-action="remove">Eliminar</button>
-              <span class="badge" aria-label="likes">0</span>
-        </div>
-    `;
-    listaArticulos2.append(new_article);
+    const article = buildcard({
+        title: 'Nuevo Artículo',
+        text: 'Este es un nuevo artículo agregado al DOM.',
+        tags: 'nuevo artículo'
+    });
+
+    listaArticulos2.append(article);
     setEstado('Nueva card agregada');
 });
 
