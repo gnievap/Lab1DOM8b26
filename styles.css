@@ -154,3 +154,7 @@ dd{ margin:.25rem 0 0; color:var(--muted); }
   outline: 2px solid var(--line);
   transform: translateY(-2px);
 }
+
+[hidden]{
+  display: none !important;
+}

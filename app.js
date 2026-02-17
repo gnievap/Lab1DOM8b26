@@ -126,3 +126,18 @@ const doRemove = (card) => {
         : badge.textContent = 0;
     setEstado('Se eliminó un like de un artículo');
 };
+
+// Evento input: filtrar mientras se escribe en la caja de texto
+filtro.addEventListener('input', ()=>{
+    // q: lo que el usuario escribe en el input
+    const q = filtro.value.trim().toLowerCase();
+    const cards = $$('#listaArticulos .card');
+
+    cards.forEach((card) => {
+        const ok = q === '' ? true : matchText(card, q);
+        card.hidden = !ok;
+    });
+
+    setEstado( q === '' ? 'Filtro vacío' : `Filtro texto: "${q}"`);
+
+});
