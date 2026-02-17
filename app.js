@@ -139,5 +139,19 @@ filtro.addEventListener('input', ()=>{
     });
 
     setEstado( q === '' ? 'Filtro vacío' : `Filtro texto: "${q}"`);
+});
 
+const chips = $('#chips');
+chips.addEventListener('click', (e) => {
+    const chip = e.target.closest('.chip');
+    if (!chip) return;
+
+    const tag = (chip.dataset.tag || '').toLowerCase();
+    const cards = $$('#listaArticulos .card');
+
+    cards.forEach((card) => {
+        const tags = (card.dataset.tags || '').toLowerCase();
+        card.hidden = !tags.includes(tag);
+    });
+    setEstado(`Filtro por etiqueta: "${tag}"`);
 });
