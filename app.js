@@ -150,8 +150,22 @@ chips.addEventListener('click', (e) => {
     const cards = $$('#listaArticulos .card');
 
     cards.forEach((card) => {
-        const tags = (card.dataset.tags || '').toLowerCase();
-        card.hidden = !tags.includes(tag);
+        // const tags = (card.dataset.tags || '').toLowerCase();
+        // card.hidden = !tags.includes(tag);
+
+        const ok = q === '' ? true : matchTag(card, q);
+        card.hidden = !ok;
     });
     setEstado(`Filtro por etiqueta: "${tag}"`);
 });
+
+const filterState = {
+      q: '',
+    tag: '',
+};
+
+const matchTag = (card, tag) => { 
+    if (!tag) return true;
+    const tags = (card.dataset.tags || '').toLowerCase();
+    return tags.includes(tag.toLowerCase());
+};
