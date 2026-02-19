@@ -127,18 +127,32 @@ const doRemove = (card) => {
     setEstado('Se eliminó un like de un artículo');
 };
 
+
 // Evento input: filtrar mientras se escribe en la caja de texto
+const filtro = $('#filtro');
+
+const matchText = (card, q) => {
+    const title = card.querySelector('.card-title')?.textContent ?? '';
+    const text = card.querySelector('.card-text')?.textContent ?? '';
+    const haystack = (title + ' ' + text).toLowerCase();
+    return haystack.includes(q);
+}
+
+
 filtro.addEventListener('input', ()=>{
     // q: lo que el usuario escribe en el input
-    const q = filtro.value.trim().toLowerCase();
-    const cards = $$('#listaArticulos .card');
+    // const q = filtro.value.trim().toLowerCase();
+    // const cards = $$('#listaArticulos .card');
 
-    cards.forEach((card) => {
-        const ok = q === '' ? true : matchText(card, q);
-        card.hidden = !ok;
-    });
+    // cards.forEach((card) => {
+    //     const ok = q === '' ? true : matchText(card, q);
+    //     card.hidden = !ok;
+    // });
 
-    setEstado( q === '' ? 'Filtro vacío' : `Filtro texto: "${q}"`);
+    // setEstado( q === '' ? 'Filtro vacío' : `Filtro texto: "${q}"`);
+
+    filterState.q = filtro.value.trim().toLowerCase();
+    applyFilters();
 });
 
 const chips = $('#chips');
@@ -147,16 +161,20 @@ chips.addEventListener('click', (e) => {
     if (!chip) return;
 
     const tag = (chip.dataset.tag || '').toLowerCase();
-    const cards = $$('#listaArticulos .card');
+    filterState.tag = (filterState.tag === tag) 
+      ? '' 
+      : tag; 
+    applyFilters();
 
-    cards.forEach((card) => {
-        // const tags = (card.dataset.tags || '').toLowerCase();
-        // card.hidden = !tags.includes(tag);
+    // const cards = $$('#listaArticulos .card');
+    // cards.forEach((card) => {
+    //     // const tags = (card.dataset.tags || '').toLowerCase();
+    //     // card.hidden = !tags.includes(tag);
 
-        const ok = q === '' ? true : matchTag(card, q);
-        card.hidden = !ok;
-    });
-    setEstado(`Filtro por etiqueta: "${tag}"`);
+    //     const ok = q === '' ? true : matchTag(card, q);
+    //     card.hidden = !ok;
+    // });
+    // setEstado(`Filtro por etiqueta: "${tag}"`);
 });
 
 const filterState = {
@@ -168,4 +186,22 @@ const matchTag = (card, tag) => {
     if (!tag) return true;
     const tags = (card.dataset.tags || '').toLowerCase();
     return tags.includes(tag.toLowerCase());
+};
+
+const applyFilters = () => {
+    const cards = $$('#listaArticulos .card');
+    cards.forEach((card) => {
+        const okText = filterState.q 
+            ? matchText(card, filterState.q) 
+            : true;
+        const okTag = matchTag(card, filterState.tag);
+        card.hidden = !(okText && okTag);
+    });
+
+    const parts = [];
+    if (filterState.q) parts.push(`texto: "${filterState.q}"`);
+    if (filterState.tag) parts.push(`tag: "${filterState.tag}"`);
+    setEstado(parts.length > 0 
+        ? `Filtros :  ${parts.join(' + ')}` 
+        : 'Filtros: ninguno');
 };
