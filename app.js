@@ -205,3 +205,42 @@ const applyFilters = () => {
         ? `Filtros :  ${parts.join(' + ')}` 
         : 'Filtros: ninguno');
 };
+
+const form = $('#formNewsLetter');
+const email = $('#email');
+const interes = $('#interes');
+const feedback = $('#feedback');
+
+// Validar el email con una expresión regular simple
+const isValidEmail = (value) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
+
+form.addEventListener('submit', (e) => {
+    e.preventDefault(); // Evitar el envío del formulario
+    const valueEmail = email.value.trim();
+    const valueInteres = interes.value.trim();
+
+    email.classList.remove('is-invalid');
+    interes.classList.remove('is-invalid');
+    feedback.textContent = '';
+
+    let ok = true;
+
+    if (!isValidEmail(valueEmail)) {
+        email.classList.add('is-invalid');
+        ok = false;
+    }
+    if (!valueInteres ) {
+        interes.classList.add('is-invalid');
+        ok = false;
+    }
+    if ( !ok ) {
+        feedback.textContent = 'Revisa los campos marcados';
+        setEstado('Formulario con errores');
+        return;
+    }
+
+    // Simular envío de datos
+    feedback.textContent = `¡Gracias por suscribirte! al tema "${valueInteres}"`;
+    setEstado('Formulario enviado con éxito.');
+    form.reset();
+});
