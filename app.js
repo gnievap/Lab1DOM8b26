@@ -244,3 +244,42 @@ form.addEventListener('submit', (e) => {
     setEstado('Formulario enviado con éxito.');
     form.reset();
 });
+
+// Carga asíncrona de noticias
+const listaNoticias = $('#listaNoticias');
+
+const renderNoticias = (items) => {
+    listaNoticias.innerHTML = '';
+
+    if ( !items || items.length === 0 ) {
+        const li = document.createElement('li');
+        li.textContent = 'No se encontraron noticias.';
+        listaNoticias.append(li);
+        return;
+    }
+    items.forEach((t) => {
+        const li = document.createElement('li');
+        li.textContent = t;
+        listaNoticias.append(li);
+    });
+};
+
+//renderNoticias(['Noticia 1', 'Noticia 2', 'Noticia 3']);
+
+// Simular servicio de fetch
+const fakeFetchNoticias = () => {
+    return new Promise((resolve, reject) => {
+        const shouldFail = Math.random() < 0.2; // 20% de probabilidad de fallo
+        setTimeout(() => {
+            if (shouldFail) {
+                reject(new Error('Fallo de red simulado.'));
+                return;
+            }
+            resolve([
+                'Nuevo estándar: evaluación de modelos con benchmarks',
+                'Caso real: IA para detección de fraudes bancarios',
+                'Deep fakes en México: riesgos y regulaciones',
+            ]);
+        }, 1500);
+    });
+};
