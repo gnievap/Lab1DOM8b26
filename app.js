@@ -279,6 +279,26 @@ const fakeFetchNoticias = () => {
                 'Caso real: IA para detección de fraudes bancarios',
                 'Deep fakes en México: riesgos y regulaciones',
             ]);
+            // Cuando no hay datos
+            //resolve([]); 
         }, 1500);
     });
 };
+
+// asignar el evento al botón de cargar noticias
+const btnCargar = $('#btnCargar');
+btnCargar.addEventListener('click', async() => {
+    btnCargar.disabled = true;
+    setEstado('Cargando noticias...');
+    try{
+        // esperar a que se resuelva la promesa
+        const items = await fakeFetchNoticias();
+        renderNoticias(items);
+        setEstado('Noticias cargadas');
+    } catch (error) {
+        renderNoticias([`Error: ${error.message}`]);
+        setEstado('Error al cargar noticias');
+     } finally {
+        btnCargar.disabled = false;
+     }
+});
