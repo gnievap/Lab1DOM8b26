@@ -82,7 +82,7 @@ btnEliminarCard.addEventListener('click', () => {
     const cards = $$('#listaArticulos .card');
     let removed = 0;
     cards.forEach(card => { 
-        if ( card.dataset.seed == 'true' ) return;
+        if ( card.dataset.seed === 'true' ) return;
         card.remove();
         removed++;
     });
@@ -206,7 +206,7 @@ const applyFilters = () => {
         : 'Filtros: ninguno');
 };
 
-const form = $('#formNewsLetter');
+const form = $('#formNewsletter');
 const email = $('#email');
 const interes = $('#interes');
 const feedback = $('#feedback');
@@ -264,7 +264,6 @@ const renderNoticias = (items) => {
     });
 };
 
-//renderNoticias(['Noticia 1', 'Noticia 2', 'Noticia 3']);
 
 // Simular servicio de fetch
 const fakeFetchNoticias = () => {
